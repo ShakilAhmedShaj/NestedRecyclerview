@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.decimalab.nestedrecyclerview.model.Item" />
+
+        <variable
+            name="itemClickListener"
+            type="com.decimalab.nestedrecyclerview.view.main.CardClickListener" />
+
+        <variable
+            name="childItemAdapter"
+            type="com.decimalab.nestedrecyclerview.view.main.ChildItemsAdapter" />
+
+        <import type="com.decimalab.nestedrecyclerview.model.Chapter" />
+
+        <import type="com.decimalab.nestedrecyclerview.model.Document" />
+
+        <import type="android.view.View" />
+
+        <import type="android.view.Gravity" />
+
+        <import type="android.widget.TextView" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="3dp"
+        android:onClick="@{() -> itemClickListener.cardClicked(model)}">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rel_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+
+                    android:id="@+id/item_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:src="@{model.imageResource}"
+                    android:visibility="@{model instanceof Chapter ? View.GONE : View.VISIBLE }" />
+
+                <TextView
+                    android:id="@+id/item_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toEndOf="@id/item_icon"
+                    android:gravity="@{model instanceof Chapter ? Gravity.CENTER_VERTICAL : Gravity.CENTER}"
+                    android:text="@{model.itemTitle}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/item_title"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toEndOf="@id/item_icon"
+                    android:gravity="center"
+                    android:text="@{model instanceof Document ? model.itemSubTitle : @string/default_sub_title}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:visibility="@{model instanceof Document ? View.VISIBLE : View.GONE, default=gone }" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
+                android:id="@+id/childRecyclerView"
+                android:layout_marginStart="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:adapter="@{childItemAdapter}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</layout>
